@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import TextInput from './components/Form/TextInput';
 import "./i18n";
-import { Form } from "./components/Form/Form";
+import "./styles/style.scss";
+
+import { Form, TextInput } from "./components";
 
 const App = () => {
 	const handleSubmit = (values: { [key: string]: any }) => {
@@ -19,11 +20,16 @@ const App = () => {
 	};
 
 	return (
-		<div>
+		<div style={{ width: 320, marginLeft: 'auto', marginRight: 'auto', paddingTop: 120 }}>
 			<h1>Sample Form</h1>
+			<br />
+			<br />
 			<Form initialValues={{ name: '', email: '' }} onSubmit={handleSubmit}>
 				<TextInput name="name" label="Name" validate={validateName} />
 				<TextInput name="email" label="Email" />
+				<TextInput name="description" label="Description" multiline />
+				<br />
+				<br />
 				<button type="submit">Submit</button>
 			</Form>
 		</div>

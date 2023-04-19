@@ -1,0 +1,111 @@
+@import "./vars";
+
+.TextInput {
+	--background-color: #f7f7f7;
+
+	
+
+	&:not(:first-child) {
+		margin-top: 24px;
+	}
+
+	.Field {
+		position: relative;
+		width: 100%;
+		min-height: $input-height;
+		background-color: var(--background-color);
+		border-radius: $field-radius $field-radius 0 0;
+	
+		display: flex;
+		align-items: center;
+
+		.Indicator {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 1px;
+			background-color: $indicator-color;
+			transition: $transition;
+			transition-property: background-color, height;
+		}
+	}
+
+	.Input {
+		flex-grow: 1;
+		overflow: hidden;
+
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+
+		width: calc(100% - ($input-padding * 2));
+		height: calc($input-height - $input-padding);
+		margin: 0 $input-padding;
+		padding-top: ($input-padding);
+
+		label {
+			--color: $label-color;
+
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: calc($input-height - $input-padding);
+			display: flex;
+			align-items: center;
+			color: $label-color;
+			font-size: $label-size;
+			user-select: none;
+			transition: $transition;
+			transition-property: color, font-size, height;
+		}
+
+		input, textarea {
+			position: relative;
+			top: 0;
+			width: 100%;
+			background-color: transparent;
+
+			&:focus {
+				outline: none;
+			}
+		}
+
+		textarea {
+			resize: none;
+		}
+	}
+
+	.SupportingText {
+		margin-top: 4px;
+		padding: 0 $input-padding;
+		font-size: 14px;
+		color: $support-color;
+	}
+
+	// Filled & focused state
+	&.filled, &.focused {
+		.Input {
+			label {
+				font-weight: 600;
+				font-size: 12px;
+				height: $label-size;
+			}
+		}
+		.Indicator {
+			height: 2px;
+			background-color: $indicator-focused-color;
+		}
+	}
+
+	// Focused state
+	&.focused {
+		.Input {
+			label {
+				color: $label-focused-color;
+			}
+		}
+	}
+
+}
