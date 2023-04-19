@@ -1,5 +1,5 @@
 {
-  "name": "@yourusername/flawless-ui",
+  "name": "@ariadng/flawless",
   "version": "0.1.0",
   "description": "A performant, beautiful, and delightful UI library for React",
   "main": "lib/index.js",
