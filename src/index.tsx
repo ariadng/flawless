@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import "./i18n";
 import "./styles/style.scss";
 
@@ -36,4 +35,14 @@ const App = () => {
 	);
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { createRoot } from 'react-dom/client';
+
+const domNode = document.getElementById('root');
+if (domNode) {
+	const root = createRoot(domNode);
+	root.render(
+		<React.StrictMode>
+			<App />
+		</React.StrictMode>
+	);
+}
