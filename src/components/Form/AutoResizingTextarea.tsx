@@ -14,7 +14,7 @@ const AutoResizingTextarea: React.FC<AutoResizingTextareaProps> = ({ ...props })
 
 	return (
 		<textarea
-			rows={1}
+			rows={2}
 			{...props}
 			ref={textareaRef}
 			style={{ ...props.style, overflow: 'hidden', resize: 'none' }}
