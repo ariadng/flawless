@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { Form } from '../Form';
-import TextInput from '../TextInput';
+import { TextInput } from '../TextInput';
 describe('Form', () => {
 	test('submits form with correct values', () => {
 		const handleSubmit = jest.fn();

@@ -45,4 +45,4 @@ const TextInput: React.FC<TextInputProps> = ({ name, label, validate }) => {
 	);
 };
 
-export default TextInput;
+export { TextInput };
