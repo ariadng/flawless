@@ -3,6 +3,7 @@ import { useFormContext } from './Form';
 import styles from './styles/TextInput.module.scss';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
+import { AutoResizingTextarea } from './AutoResizingTextarea';
 
 
 /**
@@ -36,7 +37,7 @@ const TextInput: React.FC<TextInputProps> = React.memo(({ name, label, validate,
 	};
 
 	const getValue = (): string => {
-		return values[name] === undefined || values[name] === null ? '' : String(values[name]).trim();
+		return values[name] === undefined || values[name] === null ? '' : String(values[name]);
 	};
 	
 	const debouncedValidate = useMemo(() => validate ? validate : null, [validate]);
@@ -77,7 +78,7 @@ const TextInput: React.FC<TextInputProps> = React.memo(({ name, label, validate,
 				<div className={styles.Input}>
 					<label htmlFor={name}>{label}</label>
 					{multiline ? (
-						<textarea {...inputProps} />
+						<AutoResizingTextarea {...inputProps} />
 					) : (
 						<input {...inputProps} />
 					)}
