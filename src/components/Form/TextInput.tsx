@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useFormContext } from './Form';
 import styles from './styles/TextInput.module.scss';
 import classNames from 'classnames';
+import { debounce } from 'lodash';
 
 
 /**
@@ -17,7 +18,7 @@ interface TextInputProps {
 /**
  * A TextInput component that integrates with the Form component to manage its state and validation.
  */
-const TextInput: React.FC<TextInputProps> = ({ name, label, validate, multiline }) => {
+const TextInput: React.FC<TextInputProps> = React.memo(({ name, label, validate, multiline }) => {
 	const { values, errors, setFieldValue, setFieldError, touched, setTouched } = useFormContext();
 
 	const [focused, setFocused] = useState(false);
@@ -37,17 +38,20 @@ const TextInput: React.FC<TextInputProps> = ({ name, label, validate, multiline 
 	const getValue = (): string => {
 		return values[name] === undefined || values[name] === null ? '' : String(values[name]).trim();
 	};
+	
+	const debouncedValidate = useMemo(() => validate ? validate : null, [validate]);
 
 	/**
 	 * When the component mounts or updates, check if the input field is touched and
 	 * has a validate function, and then set the field error accordingly.
 	 */
 	useEffect(() => {
-		if (touched && validate) {
-			const error = validate(values[name]);
+		if (touched && debouncedValidate) {
+			const error = debouncedValidate(values[name]);
 			setFieldError(name, error || '');
 		}
 	}, [name, touched, validate, values, setFieldError]);
+
 
 	/**
 	 * Handles the change event for the input field, updating its value and
@@ -85,6 +89,6 @@ const TextInput: React.FC<TextInputProps> = ({ name, label, validate, multiline 
 			</div>
 		</div>
 	);
-};
+});
 
 export { TextInput };
