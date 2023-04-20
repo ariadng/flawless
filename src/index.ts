@@ -1,4 +1,4 @@
 export * from './components';
 import * as flawless from './components';
 
-export default {...flawless};
+export default flawless;
