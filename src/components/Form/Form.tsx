@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useCallback, useMemo, useEf
 /**
  * Interface representing the data passed through the FormContext.
  */
-interface FormContextData {
+export interface FormContextData {
 	values: { [key: string]: any };
 	errors: { [key: string]: string };
 	touched: { [key: string]: boolean };
@@ -16,14 +16,14 @@ interface FormContextData {
 /**
  * The FormContext is used to provide form state and functions to all form components.
  */
-const FormContext = createContext<FormContextData | null>(null);
+export const FormContext = createContext<FormContextData | null>(null);
 
 /**
  * Custom hook to access the FormContext.
  * @throws {Error} If the hook is used outside of a FormProvider.
  * @returns {FormContextData} The FormContext data.
  */
-const useFormContext = () => {
+export const useFormContext = () => {
 	const context = useContext(FormContext);
 	if (!context) {
 		throw new Error('useFormContext must be used within a FormProvider');
@@ -34,7 +34,7 @@ const useFormContext = () => {
 /**
  * Interface representing the props for the Form component.
  */
-interface FormProps {
+export interface FormProps {
 	data: { [key: string]: any };
 	onSubmit: (values: { [key: string]: any }) => void;
 	children: React.ReactNode;
@@ -43,7 +43,7 @@ interface FormProps {
 /**
  * A Form component that manages its fields' state and validation.
  */
-const Form: React.FC<FormProps> = ({ data, onSubmit, children }) => {
+export const Form: React.FC<FormProps> = ({ data, onSubmit, children }) => {
 	const [values, setValues] = useState(data);
 	const [errors, setErrors] = useState<{ [key: string]: string }>({});
 	const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
@@ -90,5 +90,3 @@ const Form: React.FC<FormProps> = ({ data, onSubmit, children }) => {
 		</FormContext.Provider>
 	);
 };
-
-export { Form, useFormContext };

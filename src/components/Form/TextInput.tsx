@@ -9,7 +9,7 @@ import { AutoResizingTextarea } from './AutoResizingTextarea';
 /**
  * Interface representing the props for the TextInput component.
  */
-interface TextInputProps {
+export interface TextInputProps {
 	name: string;
 	label: string;
 	validate?: (value: string) => string | undefined;
@@ -19,7 +19,7 @@ interface TextInputProps {
 /**
  * A TextInput component that integrates with the Form component to manage its state and validation.
  */
-const TextInput: React.FC<TextInputProps> = React.memo(({ name, label, validate, multiline }) => {
+export const TextInput: React.FC<TextInputProps> = React.memo(({ name, label, validate, multiline }) => {
 	const { values, errors, setFieldValue, setFieldError, touched, setTouched } = useFormContext();
 
 	const [focused, setFocused] = useState(false);
@@ -92,5 +92,3 @@ const TextInput: React.FC<TextInputProps> = React.memo(({ name, label, validate,
 		</div>
 	);
 });
-
-export { TextInput };
