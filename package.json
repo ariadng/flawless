@@ -2,7 +2,7 @@
 	"name": "@dhanang/flawless",
 	"version": "0.1.1",
 	"description": "A performant, beautiful, and delightful UI library for React",
-	"main": "dist/bundle.js",
+	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"start": "webpack serve --open --mode development",
