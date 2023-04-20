@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import { isEqual } from 'lodash';
+import React, { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
 
 /**
  * Interface representing the data passed through the FormContext.
@@ -34,7 +35,7 @@ const useFormContext = () => {
  * Interface representing the props for the Form component.
  */
 interface FormProps {
-	initialValues: { [key: string]: any };
+	data: { [key: string]: any };
 	onSubmit: (values: { [key: string]: any }) => void;
 	children: React.ReactNode;
 }
@@ -42,8 +43,8 @@ interface FormProps {
 /**
  * A Form component that manages its fields' state and validation.
  */
-const Form: React.FC<FormProps> = ({ initialValues, onSubmit, children }) => {
-	const [values, setValues] = useState(initialValues);
+const Form: React.FC<FormProps> = ({ data, onSubmit, children }) => {
+	const [values, setValues] = useState(data);
 	const [errors, setErrors] = useState<{ [key: string]: string }>({});
 	const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
 
@@ -61,7 +62,7 @@ const Form: React.FC<FormProps> = ({ initialValues, onSubmit, children }) => {
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		// Touch all fields when the form is submitted
-		const allTouched = Object.keys(initialValues).reduce((acc, key) => {
+		const allTouched = Object.keys(data).reduce((acc, key) => {
 			acc[key] = true;
 			return acc;
 		}, {} as { [key: string]: boolean });
@@ -69,6 +70,13 @@ const Form: React.FC<FormProps> = ({ initialValues, onSubmit, children }) => {
 		setTouched(allTouched);
 		onSubmit(values);
 	};
+
+	// Update values when data change
+	useEffect(() => {
+		if (!isEqual(values, data)) {
+			setValues(data);
+		}
+	}, [data]);
 
 	// Memoize the context value to prevent unnecessary updates to the context consumers.
 	const contextValue = useMemo(

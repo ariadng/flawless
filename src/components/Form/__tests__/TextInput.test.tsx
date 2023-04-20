@@ -1,8 +1,9 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { Form } from '../Form';
 import { TextInput } from '../TextInput';
+import { act } from 'react-dom/test-utils';
 
 /**
  * Test suite for the TextInput component.
@@ -13,7 +14,7 @@ describe('TextInput', () => {
 	 */
 	test('renders label and input', () => {
 		render(
-			<Form initialValues={{ name: '' }} onSubmit={() => { }}>
+			<Form data={{ name: '' }} onSubmit={() => { }}>
 				<TextInput name="name" label="Name" />
 			</Form>,
 		);
@@ -32,7 +33,7 @@ describe('TextInput', () => {
 		};
 
 		render(
-			<Form initialValues={{ name: '' }} onSubmit={() => { }}>
+			<Form data={{ name: '' }} onSubmit={() => { }}>
 				<TextInput name="name" label="Name" validate={validate} />
 				<button type="submit">Submit</button>
 			</Form>,
@@ -45,7 +46,7 @@ describe('TextInput', () => {
 
 	test('correctly handles the value 0', () => {
 		render(
-			<Form initialValues={{ number: 0 }} onSubmit={() => { }}>
+			<Form data={{ number: 0 }} onSubmit={() => { }}>
 				<TextInput name="number" label="Number" />
 			</Form>,
 		);
@@ -53,9 +54,9 @@ describe('TextInput', () => {
 		expect(screen.getByLabelText('Number')).toHaveValue('0');
 	});
 
-	test('handles empty string value', () => {
+	test('handles empty string value', async () => {
 		render(
-			<Form initialValues={{ name: '' }} onSubmit={() => { }}>
+			<Form data={{ name: '' }} onSubmit={() => { }}>
 				<TextInput name="name" label="Name" />
 			</Form>,
 		);
@@ -64,15 +65,15 @@ describe('TextInput', () => {
 		expect(input).toHaveValue('');
 
 		userEvent.type(input, 'John');
-		expect(input).toHaveValue('John');
+		await waitFor(() => expect(input).toHaveValue('John'));
 
 		userEvent.clear(input);
-		expect(input).toHaveValue('');
+		await waitFor(() => expect(input).toHaveValue(''));
 	});
 
 	test('handles null value', () => {
 		render(
-			<Form initialValues={{ name: null }} onSubmit={() => { }}>
+			<Form data={{ name: null }} onSubmit={() => { }}>
 				<TextInput name="name" label="Name" />
 			</Form>,
 		);
@@ -83,7 +84,7 @@ describe('TextInput', () => {
 
 	test('renders textarea when multiline prop is set to true', () => {
 		render(
-			<Form initialValues={{ description: '' }} onSubmit={() => { }}>
+			<Form data={{ description: '' }} onSubmit={() => { }}>
 				<TextInput name="description" label="Description" multiline />
 			</Form>,
 		);

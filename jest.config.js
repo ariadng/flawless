@@ -5,4 +5,9 @@ module.exports = {
 	moduleNameMapper: {
 		'\\.scss$': 'identity-obj-proxy',
 	},
+	testMatch: [
+		'**/__tests__/**/*.[jt]s?(x)',
+		'**/?(*.)+(spec|test).[jt]s?(x)',
+		'**/?(*.)+(stress.test).[jt]s?(x)',
+	],
 };

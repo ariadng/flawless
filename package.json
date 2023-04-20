@@ -7,8 +7,8 @@
 	"scripts": {
 		"start": "webpack serve --open --mode development",
 		"build": "webpack --mode production",
-		"test": "jest",
-		"test:watch": "jest --watch",
+		"test": "jest --testPathIgnorePatterns='.*\\.stress\\.test\\.[jt]sx?$'",
+		"test:stress": "jest --testPathPattern='.*\\.stress\\.test\\.[jt]sx?$'",
 		"prepublishOnly": "npm run build"
 	},
 	"keywords": [],

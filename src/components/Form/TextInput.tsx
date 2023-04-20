@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFormContext } from './Form';
 import styles from './styles/TextInput.module.scss';
 import classNames from 'classnames';
@@ -36,9 +36,10 @@ const TextInput: React.FC<TextInputProps> = React.memo(({ name, label, validate,
 		setFocused(false);
 	};
 
-	const getValue = (): string => {
+	const getValue = useCallback((name: string): string => {
 		return values[name] === undefined || values[name] === null ? '' : String(values[name]);
-	};
+	}, [values]);
+
 	
 	const debouncedValidate = useMemo(() => validate ? validate : null, [validate]);
 
@@ -66,7 +67,7 @@ const TextInput: React.FC<TextInputProps> = React.memo(({ name, label, validate,
 	const inputProps = {
 		id: name,
 		name,
-		value: getValue(),
+		value: getValue(name),
 		onChange: handleChange,
 		onFocus: handleFocus,
         onBlur: handleBlur,

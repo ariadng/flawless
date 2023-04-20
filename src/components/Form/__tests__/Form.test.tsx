@@ -7,7 +7,7 @@ describe('Form', () => {
 		const handleSubmit = jest.fn();
 
 		render(
-			<Form initialValues={{ name: '', email: '' }} onSubmit={handleSubmit}>
+			<Form data={{ name: '', email: '' }} onSubmit={handleSubmit}>
 				<TextInput name="name" label="Name" />
 				<TextInput name="email" label="Email" />
 				<button type="submit">Submit</button>

@@ -23,7 +23,7 @@ const App = () => {
 			<h1>Sample Form</h1>
 			<br />
 			<br />
-			<Form initialValues={{ name: '', email: '' }} onSubmit={handleSubmit}>
+			<Form data={{ name: '', email: '' }} onSubmit={handleSubmit}>
 				<TextInput name="name" label="Name" validate={validateName} />
 				<TextInput name="email" label="Email" />
 				<TextInput name="description" label="Description" multiline />
