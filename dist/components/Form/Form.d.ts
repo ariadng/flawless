@@ -2,7 +2,7 @@ import React from 'react';
 /**
  * Interface representing the data passed through the FormContext.
  */
-interface FormContextData {
+export interface FormContextData {
     values: {
         [key: string]: any;
     };
@@ -19,15 +19,19 @@ interface FormContextData {
     setFieldError: (field: string, error: string) => void;
 }
 /**
+ * The FormContext is used to provide form state and functions to all form components.
+ */
+export declare const FormContext: React.Context<FormContextData | null>;
+/**
  * Custom hook to access the FormContext.
  * @throws {Error} If the hook is used outside of a FormProvider.
  * @returns {FormContextData} The FormContext data.
  */
-declare const useFormContext: () => FormContextData;
+export declare const useFormContext: () => FormContextData;
 /**
  * Interface representing the props for the Form component.
  */
-interface FormProps {
+export interface FormProps {
     data: {
         [key: string]: any;
     };
@@ -39,5 +43,4 @@ interface FormProps {
 /**
  * A Form component that manages its fields' state and validation.
  */
-declare const Form: React.FC<FormProps>;
-export { Form, useFormContext };
+export declare const Form: React.FC<FormProps>;
