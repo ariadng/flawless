@@ -1,0 +1,24 @@
+$menu-padding: 16px;
+$menu-radius: 4px;
+$field-height: 56px;
+$option-height: 48px;
+
+.Menu {
+	position: absolute;
+	width: calc(100% + (2 * $menu-padding));
+	z-index: 5000;
+	top: calc($field-height);
+	left: calc(-1 * $menu-padding);
+
+	padding: ($menu-padding * 0.5) 0;
+	background-color: #f7f7f7;
+	border-radius: $menu-radius;
+
+
+	.Option {
+		height: $option-height;
+		padding: 0 $menu-padding;
+		display: flex;
+		align-items: center;
+	}
+}

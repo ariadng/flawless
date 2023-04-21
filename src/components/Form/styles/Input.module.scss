@@ -3,6 +3,8 @@
 .FormField {
 	--background-color: #f7f7f7;
 
+	position: relative;
+
 	&:not(:first-child) {
 		margin-top: 24px;
 	}
@@ -32,7 +34,6 @@
 
 	.Input {
 		flex-grow: 1;
-		overflow: hidden;
 
 		position: relative;
 		display: flex;
