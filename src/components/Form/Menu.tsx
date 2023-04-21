@@ -25,7 +25,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
 					<div
 						key={option.value}
 						className={styles.Option}
-						onClick={(event) => {event.stopPropagation(); onSelect(option.value); }}
+						onClick={(event) => { event.preventDefault(); event.stopPropagation(); onSelect(option.value); }}
 					>
 						{option.label}
 					</div>

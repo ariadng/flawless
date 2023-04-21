@@ -1,10 +1,11 @@
-import { isEqual } from 'lodash';
+import { debounce, isEqual } from 'lodash';
 import React, { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
 
 /**
  * Interface representing the data passed through the FormContext.
  */
 export interface FormContextData {
+	formId: string;
 	values: { [key: string]: any };
 	errors: { [key: string]: string };
 	touched: { [key: string]: boolean };
@@ -36,6 +37,7 @@ export const useFormContext = () => {
  */
 export interface FormProps {
 	data: { [key: string]: any };
+	onUpdate?: (values: { [key: string]: any }) => void;
 	onSubmit: (values: { [key: string]: any }) => void;
 	children: React.ReactNode;
 }
@@ -43,10 +45,12 @@ export interface FormProps {
 /**
  * A Form component that manages its fields' state and validation.
  */
-export const Form: React.FC<FormProps> = ({ data, onSubmit, children }) => {
+export const Form: React.FC<FormProps> = ({ data, onSubmit, onUpdate, children }) => {
 	const [values, setValues] = useState(data);
 	const [errors, setErrors] = useState<{ [key: string]: string }>({});
 	const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
+
+	const formId = useMemo(() => Math.random().toString(36).substr(2, 9), []);
 
 	const setFieldValue = useCallback((field: string, value: any) => {
 		setValues((prevValues) => ({ ...prevValues, [field]: value }));
@@ -71,16 +75,30 @@ export const Form: React.FC<FormProps> = ({ data, onSubmit, children }) => {
 		onSubmit(values);
 	};
 
+	const debouncedSetValues = useCallback(
+		debounce((newData) => {
+			setValues(newData);
+		}, 200),
+		[]
+	);
+
 	// Update values when data change
 	useEffect(() => {
 		if (!isEqual(values, data)) {
-			setValues(data);
+			debouncedSetValues(data);
 		}
-	}, [data]);
+	}, [data, debouncedSetValues]);
+
+	useEffect(() => {
+		if (onUpdate && !isEqual(values, data)) {
+			onUpdate(values);
+			console.log('values changed')
+		}
+	}, [values]);
 
 	// Memoize the context value to prevent unnecessary updates to the context consumers.
 	const contextValue = useMemo(
-		() => ({ values, errors, touched, setTouched, setFieldValue, setFieldError }),
+		() => ({ formId, values, errors, touched, setTouched, setFieldValue, setFieldError }),
 		[values, errors, touched, setTouched, setFieldValue, setFieldError]
 	);
 

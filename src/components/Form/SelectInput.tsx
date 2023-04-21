@@ -22,6 +22,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
 	validate,
 }) => {
 	const {
+		formId,
 		values,
 		errors,
 		setFieldValue,
@@ -29,6 +30,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
 		touched,
 		setTouched,
 	} = useFormContext();
+
+	const [focused, setFocused] = useState(false);
 
 	const isEmpty = (): boolean => {
 		return (
@@ -65,6 +68,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
 		}
 	};
 
+	const inputRef = useRef<HTMLInputElement>(null);
+
 	const [menuOpen, setMenuOpen] = useState(false);
 
 	const toggleMenu = () => {
@@ -85,6 +90,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
 	const handleSelect = (value: string) => {
 		setMenuOpen(false);
 		setFieldValue(name, value);
+		inputRef.current?.focus();
 	};
 
 	const getLabel = (value: string): string => {
@@ -98,19 +104,42 @@ const SelectInput: React.FC<SelectInputProps> = ({
 	useOnClickOutside(menuRef, handleMenuClose, triggerRef);
 
 	const openMenu = () => {
+		inputRef.current?.focus();
 		setMenuOpen(true);
+	};
+
+	const closeMenu = () => {
+		setMenuOpen(false);
+		inputRef.current?.focus();
+	};
+
+	const handleInputFocus: React.FocusEventHandler<HTMLInputElement> = (event) => {
+		setFocused(true);
+		// openMenu();
+	};
+
+	const handleInputBlur: React.FocusEventHandler<HTMLInputElement> = (event) => {
+		setFocused(false);
+		if (menuOpen) {
+			setTimeout(() => {
+				closeMenu();
+			}, 200);
+		}
 	};
 
 	return (
 		<Input
+			ref={triggerRef}
 			name={name}
 			label={label}
 			placeholder={placeholder}
 			validate={validate}
+			onClick={() => { openMenu() }}
+			focused={focused}
 			renderInput={(inputProps) => (
-				<div ref={triggerRef}>
+				<div>
 					<div className={styles.Value}>
-						<input value={getLabel(inputProps.value) || placeholder} onFocus={() => { openMenu() }} readOnly />
+						<input ref={inputRef} name={formId + '_' + name} value={getLabel(inputProps.value) || ''} placeholder={placeholder} onFocus={handleInputFocus} onBlur={handleInputBlur} readOnly />
 					</div>
 					<Menu
 						ref={menuRef}

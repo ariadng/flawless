@@ -1,5 +1,5 @@
 // Input.tsx
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState, forwardRef, ForwardedRef, useEffect, useRef } from 'react';
 import { useFormContext } from './Form';
 import inputStyles from './styles/Input.module.scss';
 import classNames from 'classnames';
@@ -8,14 +8,18 @@ export interface InputProps {
 	name: string;
 	label: string;
 	placeholder?: string;
+	focused?: boolean;
 	validate?: (value: string) => string | undefined;
+	onClick?: () => void;
 	renderInput: (inputProps: any) => React.ReactNode;
 }
 
-const Input: React.FC<InputProps> = ({ name, label, placeholder, validate, renderInput }) => {
-	const { values, errors, setFieldValue, setFieldError, touched, setTouched } = useFormContext();
+const Input = forwardRef(({ name, label, placeholder, validate, renderInput, onClick, ...props }: InputProps, ref: ForwardedRef<HTMLDivElement>) => {
+	const { formId, values, errors, setFieldValue, setFieldError, touched, setTouched } = useFormContext();
 
-	const [focused, setFocused] = useState(false);
+	const [focused, setFocused] = useState(props.focused ? props.focused : false);
+
+	const previousValue = useRef<any>(undefined);
 
 	const isEmpty = (): boolean => {
 		return values[name] === undefined || values[name] === null || String(values[name]).trim() === '';
@@ -29,6 +33,10 @@ const Input: React.FC<InputProps> = ({ name, label, placeholder, validate, rende
 		setFocused(false);
 	};
 
+	const handleClick = () => {
+		if(onClick) onClick();
+	};
+
 	const getValue = useCallback((name: string): string => {
 		return values[name] === undefined || values[name] === null ? '' : String(values[name]);
 	}, [values]);
@@ -36,16 +44,28 @@ const Input: React.FC<InputProps> = ({ name, label, placeholder, validate, rende
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
 		setFieldValue(name, e.target.value);
 		setTouched({ ...touched, [name]: true });
+	};
 
-		if (validate) {
-			const error = validate(e.target.value);
+	const handleValidation = useCallback(() => {
+		if (values && validate) {
+			const error = validate(values[name]);
 			setFieldError(name, error || '');
 		}
-	};
+	}, [name, validate, values, setFieldError]);
+
+	useEffect(() => {
+		setFocused(props.focused ? props.focused : false);
+	}, [props.focused]);
+
+	useEffect(() => {
+		if (previousValue.current !== values[name]) setTouched({ ...touched, [name]: true });
+		if (validate) handleValidation();
+		previousValue.current = values[name];
+	}, [values[name], handleValidation]);
 
 	const inputProps = {
 		id: name,
-		name,
+		name: formId + '_' + name,
 		value: getValue(name),
 		onChange: handleChange,
 		onFocus: handleFocus,
@@ -53,10 +73,14 @@ const Input: React.FC<InputProps> = ({ name, label, placeholder, validate, rende
 	};
 
 	return (
-		<div className={classNames(inputStyles.FormField, { [inputStyles.filled]: !isEmpty(), [inputStyles.focused]: focused, [inputStyles.error]: errors[name] })}>
+		<div
+			ref={ref}
+			className={classNames(inputStyles.FormField, { [inputStyles.filled]: !isEmpty(), [inputStyles.focused]: focused, [inputStyles.error]: errors[name] })}
+			onClick={handleClick}
+		>
 			<div className={inputStyles.Field}>
 				<div className={inputStyles.Input}>
-					<label htmlFor={name}>{label}</label>
+					<label htmlFor={formId + '_' + name}>{label}</label>
 					{renderInput(inputProps)}
 				</div>
 				<div className={inputStyles.Indicator} />
@@ -64,8 +88,10 @@ const Input: React.FC<InputProps> = ({ name, label, placeholder, validate, rende
 			<div className={inputStyles.SupportingText}>
 				{(touched[name] && errors[name]) && <div>{errors[name]}</div>}
 			</div>
-    </div >
-  );
-};
+		</div>
+	);
+});
+
+Input.displayName = 'Input';
 
 export { Input };

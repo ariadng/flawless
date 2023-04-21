@@ -1,7 +1,10 @@
 $menu-padding: 16px;
 $menu-radius: 4px;
 $field-height: 56px;
+$field-background: #f7f7f7;
 $option-height: 48px;
+$option-hovered-background: #f1f1f1;
+$option-pressed-background: #eaeaea;
 
 .Menu {
 	position: absolute;
@@ -11,7 +14,7 @@ $option-height: 48px;
 	left: calc(-1 * $menu-padding);
 
 	padding: ($menu-padding * 0.5) 0;
-	background-color: #f7f7f7;
+	background-color: $field-background;
 	border-radius: $menu-radius;
 
 
@@ -20,5 +23,14 @@ $option-height: 48px;
 		padding: 0 $menu-padding;
 		display: flex;
 		align-items: center;
+		cursor: pointer;
+
+		&:hover {
+			background-color: $option-hovered-background;
+		}
+
+		&:active {
+			background-color: $option-pressed-background;
+		}
 	}
 }
