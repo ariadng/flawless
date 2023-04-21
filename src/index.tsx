@@ -2,7 +2,7 @@ import React from "react";
 import "./i18n";
 import "./styles/style.scss";
 
-import { Form, TextInput } from "./components";
+import { Form, SelectInput, TextInput } from "./components";
 
 const App = () => {
 	const handleSubmit = (values: { [key: string]: any }) => {
@@ -24,9 +24,13 @@ const App = () => {
 			<br />
 			<br />
 			<Form data={{ name: '', email: '' }} onSubmit={handleSubmit}>
-				<TextInput name="name" label="Name" validate={validateName} />
-				<TextInput name="email" label="Email" />
-				<TextInput name="description" label="Description" multiline />
+				<TextInput name="name" label="Name" validate={validateName} placeholder="Enter your full name..." />
+				<TextInput name="email" label="Email" placeholder="Enter your email address..." />
+				<SelectInput name="gender" label="Gender" placeholder="Select a gender..." options={[
+					{ label: "Male", value: "male" },
+					{ label: "Female", value: "female" },
+				]} />
+				<TextInput name="description" label="Description" placeholder="Enter description..." multiline />
 				<br />
 				<br />
 				<button type="submit">Submit</button>
