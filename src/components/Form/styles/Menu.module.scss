@@ -1,3 +1,5 @@
+@import "./vars";
+
 $menu-padding: 16px;
 $menu-radius: 4px;
 $field-height: 56px;
@@ -9,13 +11,18 @@ $option-pressed-background: #eaeaea;
 .Menu {
 	position: absolute;
 	width: calc(100% + (2 * $menu-padding));
+	height: min-content;
 	z-index: 5000;
-	top: calc($field-height);
 	left: calc(-1 * $menu-padding);
 
 	padding: ($menu-padding * 0.5) 0;
 	background-color: $field-background;
 	border-radius: $menu-radius;
+
+	transition: $transition;
+	transition-property: all;
+	opacity: 0;
+	transform: translateY(-20px);
 
 
 	.Option {
@@ -32,5 +39,35 @@ $option-pressed-background: #eaeaea;
 		&:active {
 			background-color: $option-pressed-background;
 		}
+	}
+}
+
+.top {
+	bottom: calc($field-height);
+
+	&.open {
+		opacity: 1;
+		transform: translateY(0);
+		box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+	}
+
+	&.closed {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+}
+
+.bottom {
+	top: $field-height;
+
+	&.open {
+		opacity: 1;
+		transform: translateY(0);
+		box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+	}
+
+	&.closed {
+		opacity: 0;
+		transform: translateY(-20px);
 	}
 }

@@ -105,6 +105,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
 
 	const openMenu = () => {
 		inputRef.current?.focus();
+		calculateMenuPosition();
 		setMenuOpen(true);
 	};
 
@@ -127,6 +128,23 @@ const SelectInput: React.FC<SelectInputProps> = ({
 		}
 	};
 
+	const [menuPosition, setMenuPosition] = useState<'bottom' | 'top'>('bottom');
+
+	const calculateMenuPosition = () => {
+		if (!triggerRef.current) return;
+
+		const rect = triggerRef.current.getBoundingClientRect();
+		const screenHeight = window.innerHeight || document.documentElement.clientHeight;
+		const spaceBelow = screenHeight - rect.bottom;
+		const spaceAbove = rect.top;
+
+		if (spaceBelow < rect.height && spaceAbove > spaceBelow) {
+			setMenuPosition('top');
+		} else {
+			setMenuPosition('bottom');
+		}
+	};
+
 	return (
 		<Input
 			ref={triggerRef}
@@ -146,6 +164,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
 						options={options}
 						open={menuOpen}
 						onSelect={handleSelect}
+						position={menuPosition}
 					/>
 				</div>
 			)}

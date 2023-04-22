@@ -1,4 +1,3 @@
-// Menu.tsx
 import React, { forwardRef } from 'react';
 import styles from './styles/Menu.module.scss';
 
@@ -11,21 +10,26 @@ interface MenuProps {
 	options: Option[];
 	open: boolean;
 	onSelect: (value: string) => void;
+	className?: string;
+	position?: 'top' | 'bottom';
 }
 
 export const Menu = forwardRef<HTMLDivElement, MenuProps>(
-	({ options, open, onSelect }, ref) => {
-		if (!open) {
-			return null;
-		}
-
+	({ options, open, onSelect, className, position }, ref) => {
 		return (
-			<div className={styles.Menu} ref={ref}>
+			<div
+				className={`${styles.Menu} ${open ? styles.open : styles.closed} ${position ? styles[position] : styles.bottom}`}
+				ref={ref}
+			>
 				{options.map((option) => (
 					<div
 						key={option.value}
 						className={styles.Option}
-						onClick={(event) => { event.preventDefault(); event.stopPropagation(); onSelect(option.value); }}
+						onClick={(event) => {
+							event.preventDefault();
+							event.stopPropagation();
+							onSelect(option.value);
+						}}
 					>
 						{option.label}
 					</div>

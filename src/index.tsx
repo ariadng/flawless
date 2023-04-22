@@ -71,7 +71,15 @@ const App = () => {
 					<TextInput name="description" label="Description" placeholder="Enter description..." multiline />
 					<br />
 					<br />
+					<br />
+					<br />
+					<br />
+					<br />
 					<button type="submit">Submit</button>
+					<SelectInput name="gender" label="Gender" placeholder="Select a gender..." options={[
+						{ label: "Male", value: "male" },
+						{ label: "Female", value: "female" },
+					]} />
 				</Form>
 			</div>
 		</div>
