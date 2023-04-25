@@ -1,3 +1,2 @@
-export * from './components';
-import * as flawless from './components';
-export default flawless;
+import "./i18n";
+import "./styles/style.scss";

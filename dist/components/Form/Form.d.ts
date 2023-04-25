@@ -3,6 +3,7 @@ import React from 'react';
  * Interface representing the data passed through the FormContext.
  */
 export interface FormContextData {
+    formId: string;
     values: {
         [key: string]: any;
     };
@@ -35,6 +36,9 @@ export interface FormProps {
     data: {
         [key: string]: any;
     };
+    onUpdate?: (values: {
+        [key: string]: any;
+    }) => void;
     onSubmit: (values: {
         [key: string]: any;
     }) => void;
